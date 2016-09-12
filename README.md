@@ -1,0 +1,2 @@
+# goSplendor
+Splendor - board game.
