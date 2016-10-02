@@ -2,6 +2,7 @@ package splendor
 
 import (
 	"fmt"
+	"log"
 	"runtime"
 	"strconv"
 	"time"
@@ -26,22 +27,23 @@ var (
 
 	// Elasund = core.NewElasund()
 
-	BLACK  = &sdl.Color{0, 0, 0, 255}
-	BLUE   = &sdl.Color{10, 10, 255, 255}
-	GREEN  = &sdl.Color{100, 200, 100, 255}
-	PURPLE = &sdl.Color{100, 10, 100, 255}
-	RED    = &sdl.Color{255, 100, 100, 255}
-	SKY    = &sdl.Color{130, 130, 255, 255}
-	WHITE  = &sdl.Color{255, 255, 255, 255}
-	YELLOW = &sdl.Color{255, 255, 100, 255}
+	BLACK      = &sdl.Color{0, 0, 0, 255}
+	BLUE       = &sdl.Color{10, 10, 255, 255}
+	DARK_GREEN = &sdl.Color{10, 100, 10, 255}
+	GREEN      = &sdl.Color{100, 200, 100, 255}
+	PURPLE     = &sdl.Color{100, 10, 100, 255}
+	RED        = &sdl.Color{255, 100, 100, 255}
+	SKY        = &sdl.Color{130, 130, 255, 255}
+	WHITE      = &sdl.Color{255, 255, 255, 255}
+	YELLOW     = &sdl.Color{255, 255, 100, 255}
 
 	SkullColor = map[SkullType]*sdl.Color{
-		SkullBlack:  BLACK,
-		SkullBlue:   SKY,
-		SkullGreen:  GREEN,
-		SkullRed:    RED,
-		SkullWhite:  WHITE,
-		SkullYellow: YELLOW,
+		SBlack: BLACK,
+		SBlue:  SKY,
+		SGreen: GREEN,
+		SRed:   RED,
+		SWhite: WHITE,
+		SGold:  YELLOW,
 	}
 
 	TILE_SIZE        = 50
@@ -101,7 +103,9 @@ func Run() {
 
 	desk1 := CardDeck{}
 	for i := 1; i <= 40; i++ {
-		desk1.Put(tm.Get("1-" + strconv.Itoa(i)))
+		c := cards_1[i-1]
+		c.Texture = tm.Get("1-" + strconv.Itoa(i))
+		desk1.Put(c)
 	}
 
 	line_1 := CardDeck{}
@@ -112,7 +116,9 @@ func Run() {
 
 	desk2 := CardDeck{}
 	for i := 1; i <= 30; i++ {
-		desk2.Put(tm.Get("2-" + strconv.Itoa(i)))
+		c := cards_2[i-1]
+		c.Texture = tm.Get("2-" + strconv.Itoa(i))
+		desk2.Put(c)
 	}
 
 	line_2 := CardDeck{}
@@ -123,7 +129,9 @@ func Run() {
 
 	desk3 := CardDeck{}
 	for i := 1; i <= 20; i++ {
-		desk3.Put(tm.Get("3-" + strconv.Itoa(i)))
+		c := cards_3[i-1]
+		c.Texture = tm.Get("3-" + strconv.Itoa(i))
+		desk3.Put(c)
 	}
 
 	line_3 := CardDeck{}
@@ -165,7 +173,9 @@ func Run() {
 
 	deck_goals := CardDeck{}
 	for i := 1; i <= 10; i++ {
-		deck_goals.Put(tm.Get("g" + strconv.Itoa(i)))
+		c := goals[i-1]
+		c.Texture = tm.Get("g" + strconv.Itoa(i))
+		deck_goals.Put(c)
 	}
 
 	goals := CardDeck{}
@@ -190,7 +200,7 @@ func Run() {
 				Rect:    sdl.Rect{50, 100 + int32(i)*90, 64, 64},
 				Texture: tm.Skull(skull_type),
 				OnClick: func() {
-					if skull_type == SkullYellow {
+					if skull_type == SGold {
 						return
 					}
 					if len(to_take_skulls) == 1 {
@@ -273,6 +283,9 @@ func Run() {
 				// player_skull_padding -= e.Y
 				// player_skull_x -= 4 * e.X
 			case *sdl.MouseButtonEvent:
+				if e.Button == sdl.BUTTON_RIGHT {
+					log.Printf("right: %v", e.Type)
+				}
 				if e.Type == sdl.MOUSEBUTTONDOWN {
 					if e.Button == sdl.BUTTON_LEFT {
 						root.Click(e.X, e.Y)
@@ -287,33 +300,39 @@ func Run() {
 		}
 
 		for i := 0; i < line_1.Len(); i++ {
-			r.Copy(line_1.Get(i).(*sdl.Texture), nil, &sdl.Rect{
+			c := line_1.Get(i).(*CardTile)
+			c.Rect = sdl.Rect{
 				start_x + int32(i)*(width+padding),
 				start_y_line_1,
 				width,
 				height,
-			})
+			}
+			c.Draw(r)
 		}
 		for i := 0; i < line_2.Len(); i++ {
-			r.Copy(line_2.Get(i).(*sdl.Texture), nil, &sdl.Rect{
+			c := line_2.Get(i).(*CardTile)
+			c.Rect = sdl.Rect{
 				start_x + int32(i)*(width+padding),
 				start_y_line_2,
 				width,
 				height,
-			})
+			}
+			c.Draw(r)
 		}
 		for i := 0; i < line_3.Len(); i++ {
-			r.Copy(line_3.Get(i).(*sdl.Texture), nil, &sdl.Rect{
+			c := line_3.Get(i).(*CardTile)
+			c.Rect = sdl.Rect{
 				start_x + int32(i)*(width+padding),
 				start_y_line_3,
 				width,
 				height,
-			})
+			}
+			c.Draw(r)
 		}
 
 		back_padding := int32(4)
-		per_card := 4
-		for i := 0; i < desk1.Len()/per_card; i++ {
+		per_card := float64(4)
+		for i := 0; float64(i) < float64(desk1.Len())/per_card; i++ {
 			r.Copy(back1, nil, &sdl.Rect{
 				start_x - width - padding - int32(i)*back_padding,
 				start_y + 2*(height+padding) + int32(i)*back_padding,
@@ -321,7 +340,7 @@ func Run() {
 				height,
 			})
 		}
-		for i := 0; i < desk2.Len()/per_card; i++ {
+		for i := 0; float64(i) < float64(desk2.Len())/per_card; i++ {
 			r.Copy(back2, nil, &sdl.Rect{
 				start_x - width - padding - int32(i)*back_padding,
 				start_y + 1*(height+padding) + int32(i)*back_padding,
@@ -329,7 +348,7 @@ func Run() {
 				height,
 			})
 		}
-		for i := 0; i < desk3.Len()/per_card; i++ {
+		for i := 0; float64(i) < float64(desk3.Len())/per_card; i++ {
 			r.Copy(back3, nil, &sdl.Rect{
 				start_x - width - padding - int32(i)*back_padding,
 				start_y + int32(i)*back_padding,
@@ -339,16 +358,18 @@ func Run() {
 		}
 
 		for i := 0; i < goals.Len(); i++ {
-			r.Copy(goals.Get(i).(*sdl.Texture), nil, &sdl.Rect{
+			g := goals.Get(i).(*Goal)
+			g.Rect = sdl.Rect{
 				start_x - (goal_width + padding) + int32(i)*(goal_width+padding),
 				start_y - (goal_height + padding),
 				goal_width,
 				goal_height,
-			})
+			}
+			g.Draw(r)
 		}
 
 		for i := 0; i < hand.Len(); i++ {
-			r.Copy(hand.Get(i).(*sdl.Texture), nil, &sdl.Rect{
+			r.Copy(hand.Get(i).(*CardTile).Texture, nil, &sdl.Rect{
 				1050 + int32(i)*41,
 				330 + int32(i)*35,
 				width,

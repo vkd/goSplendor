@@ -8,23 +8,24 @@ import (
 type SkullType int
 
 const (
-	SkullBlack SkullType = iota
-	SkullBlue
-	SkullGreen
-	SkullRed
-	SkullWhite
-	SkullYellow
+	SBlack SkullType = iota
+	SBlue
+	SGreen
+	SRed
+	SWhite
+	SGold
 )
 
 var (
 	AllSkulls = []SkullType{
-		SkullBlack,
-		SkullBlue,
-		SkullGreen,
-		SkullRed,
-		SkullWhite,
-		SkullYellow,
+		SWhite,
+		SBlue,
+		SGreen,
+		SRed,
+		SBlack,
+		SGold,
 	}
+	AllVSkulls = AllSkulls[:len(AllSkulls)-1]
 )
 
 type Skulls map[SkullType]int

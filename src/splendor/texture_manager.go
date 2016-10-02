@@ -35,12 +35,12 @@ func (t *TextureManager) Initialize(r *sdl.Renderer, dirpath string) error {
 		}
 	}
 
-	t.skulls[SkullBlack] = t.tm["t-black"]
-	t.skulls[SkullBlue] = t.tm["t-blue"]
-	t.skulls[SkullGreen] = t.tm["t-green"]
-	t.skulls[SkullRed] = t.tm["t-red"]
-	t.skulls[SkullWhite] = t.tm["t-white"]
-	t.skulls[SkullYellow] = t.tm["t-yellow"]
+	t.skulls[SBlack] = t.tm["t-black"]
+	t.skulls[SBlue] = t.tm["t-blue"]
+	t.skulls[SGreen] = t.tm["t-green"]
+	t.skulls[SRed] = t.tm["t-red"]
+	t.skulls[SWhite] = t.tm["t-white"]
+	t.skulls[SGold] = t.tm["t-yellow"]
 	return nil
 }
 

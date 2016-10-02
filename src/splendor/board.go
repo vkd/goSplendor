@@ -14,12 +14,12 @@ type Board struct {
 
 func (b *Board) Initialize() {
 	b.Skulls = Skulls{
-		SkullBlack:  7,
-		SkullBlue:   7,
-		SkullGreen:  7,
-		SkullRed:    7,
-		SkullWhite:  7,
-		SkullYellow: 5,
+		SBlack: 7,
+		SBlue:  7,
+		SGreen: 7,
+		SRed:   7,
+		SWhite: 7,
+		SGold:  5,
 	}
 
 	b.Players = make([]*Player, 4)
@@ -31,7 +31,7 @@ func (b *Board) Initialize() {
 
 func (b *Board) CheckSkulls(skulls ...SkullType) bool {
 	for _, st := range skulls {
-		if st == SkullYellow {
+		if st == SGold {
 			return false
 		}
 		if b.Skulls[st] <= 0 {
