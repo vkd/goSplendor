@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/veandco/go-sdl2/sdl_ttf"
+	"github.com/veandco/go-sdl2/ttf"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -81,7 +81,7 @@ func Run() {
 	}
 	defer window.Destroy()
 
-	font, err = OpenFont("../font/cmuntb.ttf")
+	font, err = OpenFont("../../font/cmuntb.ttf")
 
 	// font, err = ttf.OpenFont("../font/cmuntb.ttf", 20)
 	if err != nil {
@@ -96,7 +96,7 @@ func Run() {
 	defer r.Destroy()
 
 	tm := TextureManager{}
-	err = tm.Initialize(r, "../textures/sm")
+	err = tm.Initialize(r, "../../textures")
 	if err != nil {
 		panic(err)
 	}
@@ -268,7 +268,7 @@ func Run() {
 			switch e := e.(type) {
 			case *sdl.QuitEvent:
 				stop = true
-			case *sdl.KeyDownEvent:
+			case *sdl.KeyboardEvent: // KeyDownEvent:
 				if e.Keysym.Sym == sdl.K_ESCAPE {
 					stop = true
 				}

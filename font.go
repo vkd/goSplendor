@@ -3,7 +3,7 @@ package splendor
 import (
 	"os"
 
-	"github.com/veandco/go-sdl2/sdl_ttf"
+	"github.com/veandco/go-sdl2/ttf"
 )
 
 type Font struct {

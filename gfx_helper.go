@@ -3,7 +3,7 @@ package splendor
 import "github.com/veandco/go-sdl2/sdl"
 
 func draw_text(text string, color *sdl.Color, p *sdl.Point, size int) {
-	s, err := font.Size(size).RenderUTF8_Blended(text, *color)
+	s, err := font.Size(size).RenderUTF8Blended(text, *color)
 	if err != nil {
 		panic(err)
 	}

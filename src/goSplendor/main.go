@@ -1,7 +1,7 @@
 package main
 
 import (
-	"splendor"
+	splendor "goSplendor"
 )
 
 func main() {
